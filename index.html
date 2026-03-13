@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحلل الطبي الذكي | Smart Medical Analyzer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:linear-gradient(160deg,#0a1628 0%,#0f2027 30%,#0a1628 60%,#1a1a2e 100%);font-family:'Noto Kufi Arabic','Inter',sans-serif;color:#e0e8f0;overflow-x:hidden;transition:direction .3s}
+    body.rtl{direction:rtl} body.ltr{direction:ltr}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes glow{0%,100%{filter:drop-shadow(0 0 8px rgba(0,210,180,.3))}50%{filter:drop-shadow(0 0 25px rgba(0,210,180,.6))}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes fadeCard{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes pulseGlow{0%,100%{box-shadow:0 0 15px rgba(0,210,180,.15)}50%{box-shadow:0 0 35px rgba(0,210,180,.3)}}
+    .bg-orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.12;pointer-events:none;z-index:0}
+    .orb1{width:450px;height:450px;background:#00d2b4;top:-120px;right:-120px}
+    .orb2{width:380px;height:380px;background:#0066cc;bottom:80px;left:-100px;animation:float 8s ease-in-out infinite}
+    .orb3{width:280px;height:280px;background:#6b3fa0;top:40%;right:25%;animation:float 10s ease-in-out infinite 2s}
+    .container{max-width:920px;margin:0 auto;padding:45px 24px 60px;position:relative;z-index:1}
+    .lang-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+    body.rtl .lang-bar{justify-content:flex-end} body.ltr .lang-bar{justify-content:flex-start}
+    .lang-btn{padding:8px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#7a8ea0;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit;display:flex;align-items:center;gap:7px}
+    .lang-btn:hover{background:rgba(255,255,255,.07);color:#b0c4d8;border-color:rgba(255,255,255,.15)}
+    .lang-btn.active{background:linear-gradient(135deg,rgba(0,210,180,.12),rgba(0,180,220,.08));border-color:rgba(0,210,180,.35);color:#00d2b4}
+    .lang-flag{font-size:17px}
+    .header{text-align:center;margin-bottom:50px}
+    .logo-box{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(135deg,rgba(0,210,180,.14),rgba(0,130,200,.08));border:1.5px solid rgba(0,210,180,.25);margin-bottom:22px;color:#00d2b4;animation:glow 3s ease-in-out infinite}
+    .logo-box svg{width:36px;height:36px}
+    .header h1{font-size:clamp(28px,5vw,44px);font-weight:800;background:linear-gradient(135deg,#fff,#00d2b4,#0088cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.4}
+    .header p{font-size:15.5px;color:#6b8299;max-width:520px;margin:0 auto;line-height:1.9}
+    .disclaimer{background:linear-gradient(135deg,rgba(255,180,0,.08),rgba(255,100,0,.04));border:1px solid rgba(255,180,0,.25);border-radius:18px;padding:18px 22px;display:flex;align-items:flex-start;gap:14px;margin-bottom:28px}
+    .disclaimer-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+    .disclaimer h4{font-size:13px;color:#e8c547;font-weight:600;margin-bottom:5px}
+    .disclaimer p{font-size:12.5px;color:#99887a;line-height:1.8}
+    .search-wrap{position:relative;margin-bottom:26px}
+    .search-icon{position:absolute;top:50%;transform:translateY(-50%);font-size:20px;opacity:.35;pointer-events:none}
+    body.rtl .search-icon{right:20px} body.ltr .search-icon{left:20px}
+    .search-input{width:100%;padding:17px 26px;border-radius:18px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#e0e8f0;font-size:15.5px;font-family:inherit;backdrop-filter:blur(12px);transition:all .3s;outline:none}
+    body.rtl .search-input{padding-right:52px} body.ltr .search-input{padding-left:52px}
+    .search-input::placeholder{color:#4a6070}
+    .search-input:focus{border-color:rgba(0,210,180,.4);box-shadow:0 0 25px rgba(0,210,180,.1)}
+    .chips-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+    .chip{padding:12px 20px;border-radius:16px;border:1.5px solid rgba(0,210,180,.12);background:rgba(255,255,255,.03);cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:500;font-family:inherit;color:#c0d0e0;backdrop-filter:blur(8px);user-select:none}
+    .chip:hover{border-color:rgba(0,210,180,.35);background:rgba(0,210,180,.07);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,210,180,.08)}
+    .chip.selected{border-color:#00d2b4;background:linear-gradient(135deg,rgba(0,210,180,.14),rgba(0,180,220,.08));box-shadow:0 0 22px rgba(0,210,180,.12),inset 0 0 18px rgba(0,210,180,.04);color:#fff}
+    .chip-icon{font-size:18px} .chip-check{font-size:13px;color:#00d2b4}
+    body.rtl .chip-check{margin-right:auto} body.ltr .chip-check{margin-left:auto}
+    .custom-input-wrap{margin-bottom:22px}
+    .custom-input{width:100%;padding:15px 24px;border-radius:16px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#e0e8f0;font-size:14px;font-family:inherit;outline:none;transition:all .3s}
+    .custom-input::placeholder{color:#4a6070} .custom-input:focus{border-color:rgba(0,210,180,.3);box-shadow:0 0 18px rgba(0,210,180,.08)}
+    .controls-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:34px}
+    .ai-toggle{display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .3s;user-select:none}
+    .ai-toggle:hover{background:rgba(255,255,255,.06)}
+    .switch{width:46px;height:26px;border-radius:13px;background:rgba(255,255,255,.15);position:relative;transition:all .3s;flex-shrink:0}
+    .switch.on{background:#00d2b4}
+    .switch::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;transition:all .3s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    body.rtl .switch::after{right:2px} body.rtl .switch.on::after{right:22px}
+    body.ltr .switch::after{left:2px} body.ltr .switch.on::after{left:22px}
+    .ai-label{font-size:13.5px;font-weight:500;transition:color .3s}
+    .count-badge{font-size:13px;color:#00d2b4;font-weight:600;padding:6px 16px;border-radius:10px;background:rgba(0,210,180,.08);border:1px solid rgba(0,210,180,.15)}
+    .analyze-wrap{text-align:center;margin-bottom:55px}
+    .analyze-btn{padding:17px 56px;border-radius:22px;border:none;background:linear-gradient(135deg,#00d2b4,#00a89e,#0088cc);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all .4s;font-family:inherit;letter-spacing:.5px;position:relative;overflow:hidden}
+    .analyze-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 18px 45px rgba(0,210,180,.3)}
+    .analyze-btn:disabled{opacity:.35;cursor:not-allowed}
+    .analyze-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(transparent,rgba(255,255,255,.08),transparent);transform:rotate(45deg);animation:shimmer 3s infinite}
+    .btn-content{display:flex;align-items:center;gap:12px;position:relative;z-index:1;justify-content:center}
+    .spinner{width:22px;height:22px;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    .results-section{animation:slideUp .6s ease-out}
+    .results-title{font-size:26px;font-weight:700;text-align:center;color:#00d2b4;margin-bottom:30px}
+    .tabs{display:flex;gap:10px;margin-bottom:26px;flex-wrap:wrap}
+    .tab-btn{padding:12px 26px;border-radius:14px;border:1.5px solid transparent;background:rgba(255,255,255,.04);color:#7a8ea0;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
+    .tab-btn:hover{background:rgba(255,255,255,.07);color:#b0c4d8}
+    .tab-btn.active{background:linear-gradient(135deg,rgba(0,210,180,.14),rgba(0,180,220,.08));border-color:rgba(0,210,180,.35);color:#00d2b4}
+    .result-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:26px;backdrop-filter:blur(16px);transition:all .3s}
+    .result-card:hover{border-color:rgba(0,210,180,.15);background:rgba(255,255,255,.055)}
+    .condition-item{padding:15px 18px;border-radius:15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:14px;margin-bottom:10px;animation:fadeCard .4s ease-out both}
+    .condition-item:last-child{margin-bottom:0}
+    .condition-item.urgent{background:rgba(255,100,100,.06);border-color:rgba(255,100,100,.15)}
+    .condition-num{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(0,210,180,.15),rgba(0,130,200,.1));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#00d2b4;flex-shrink:0}
+    .condition-num.urgent{background:rgba(255,100,100,.15);color:#ff6b6b}
+    .condition-text{font-size:14.5px;font-weight:500} .condition-text.urgent{color:#ff8888}
+    .vitamins-list{display:flex;flex-direction:column;gap:14px}
+    .vitamin-card{background:linear-gradient(135deg,rgba(0,210,180,.05),rgba(0,130,200,.03));border:1px solid rgba(0,210,180,.1);border-radius:18px;padding:22px;transition:all .3s;animation:fadeCard .4s ease-out both}
+    .vitamin-card:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(0,210,180,.08);border-color:rgba(0,210,180,.22)}
+    body.rtl .vitamin-card.priority-high{border-right:3.5px solid #ff6b6b} body.ltr .vitamin-card.priority-high{border-left:3.5px solid #ff6b6b}
+    body.rtl .vitamin-card.priority-medium{border-right:3.5px solid #ffd93d} body.ltr .vitamin-card.priority-medium{border-left:3.5px solid #ffd93d}
+    body.rtl .vitamin-card.priority-low{border-right:3.5px solid #6bff9e} body.ltr .vitamin-card.priority-low{border-left:3.5px solid #6bff9e}
+    .vitamin-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .vitamin-name{font-size:16px;font-weight:700;color:#00d2b4}
+    .priority-badge{font-size:11px;padding:4px 12px;border-radius:8px;font-weight:600}
+    .priority-badge.high{background:rgba(255,107,107,.14);color:#ff6b6b}
+    .priority-badge.medium{background:rgba(255,217,61,.14);color:#ffd93d}
+    .priority-badge.low{background:rgba(107,255,158,.14);color:#6bff9e}
+    .vitamin-dose{font-size:13.5px;color:#7b9cb8;margin-bottom:7px} .vitamin-dose span{color:#e0e8f0;font-weight:500}
+    .vitamin-reason{font-size:13px;color:#6b8a9e;line-height:1.8}
+    .tip-item{padding:15px 18px;border-radius:13px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:12px;margin-bottom:10px;animation:fadeCard .4s ease-out both}
+    .tip-item:last-child{margin-bottom:0} .tip-item.urgent{background:rgba(255,100,100,.05);border-color:rgba(255,100,100,.1)}
+    .tip-icon{font-size:16px;flex-shrink:0} .tip-text{font-size:14px;line-height:1.8}
+    .test-item{padding:13px 18px;border-radius:12px;background:rgba(0,210,180,.04);border:1px solid rgba(0,210,180,.08);display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;font-weight:500;animation:fadeCard .4s ease-out both}
+    .test-item:last-child{margin-bottom:0}
+    .analysis-card{background:rgba(255,255,255,.04);border:1px solid rgba(0,210,180,.12);border-radius:20px;padding:24px;margin-bottom:22px;animation:pulseGlow 4s ease-in-out infinite}
+    .analysis-card h3{font-size:17px;font-weight:700;color:#00d2b4;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .analysis-card p{font-size:14.5px;line-height:2;color:#b0c4d8}
+    .urgent-banner{background:linear-gradient(135deg,rgba(255,80,80,.08),rgba(255,50,50,.04));border:1px solid rgba(255,80,80,.3);border-radius:16px;padding:18px 22px;display:flex;align-items:flex-start;gap:12px;margin-bottom:22px;animation:fadeCard .5s ease-out}
+    .urgent-banner p{font-size:14px;color:#ff8888;font-weight:600;line-height:1.8}
+    .footer-disc{text-align:center;margin-top:45px;padding:22px;border-radius:18px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05)}
+    .footer-disc p{font-size:12px;color:#4a6070;line-height:1.9}
+    .hidden{display:none!important}
+    ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(0,210,180,.2);border-radius:3px}
+    @media(max-width:600px){.container{padding:30px 16px 50px}.chips-grid{gap:8px}.chip{padding:10px 16px;font-size:13px}.tabs{gap:8px}.tab-btn{padding:10px 18px;font-size:12.5px}.analyze-btn{padding:15px 40px;font-size:16px}.result-card,.vitamin-card,.analysis-card{padding:18px}.lang-bar{gap:4px}.lang-btn{padding:6px 12px;font-size:12px}}
+  </style>
+</head>
+<body class="rtl">
+<div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div>
+<div class="container">
+  <div class="lang-bar" id="langBar"></div>
+  <div class="header">
+    <div class="logo-box"><svg viewBox="0 0 32 32" fill="none"><path d="M2 16H8L11 8L16 24L21 12L24 16H30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h1 id="titleText"></h1><p id="subtitleText"></p>
+  </div>
+  <div class="disclaimer"><span class="disclaimer-icon">⚕️</span><div><h4 id="disclaimerTitle"></h4><p id="disclaimerText"></p></div></div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" autocomplete="off"></div>
+  <div class="chips-grid" id="chipsGrid"></div>
+  <div class="custom-input-wrap"><input class="custom-input" id="customSymptom"></div>
+  <div class="controls-row">
+    <div class="ai-toggle" id="aiToggle"><div class="switch" id="aiSwitch"></div><span class="ai-label" id="aiLabel"></span></div>
+    <span class="count-badge hidden" id="countBadge"></span>
+  </div>
+  <div class="analyze-wrap"><button class="analyze-btn" id="analyzeBtn" disabled><span class="btn-content" id="btnContent"></span></button></div>
+  <div id="resultsSection" class="hidden"></div>
+</div>
+<script>
+// ══════════════════════════════════════════════════
+// LANGUAGE CONFIG
+// ══════════════════════════════════════════════════
+const LANGS={ar:{flag:"🇸🇦",label:"العربية",dir:"rtl",font:"'Noto Kufi Arabic',sans-serif"},en:{flag:"🇺🇸",label:"English",dir:"ltr",font:"'Inter',sans-serif"},fr:{flag:"🇫🇷",label:"Français",dir:"ltr",font:"'Inter',sans-serif"},tr:{flag:"🇹🇷",label:"Türkçe",dir:"ltr",font:"'Inter',sans-serif"}};
+
+// ══════════════════════════════════════════════════
+// UI TRANSLATIONS
+// ══════════════════════════════════════════════════
+const UI={
+ar:{title:"المحلل الطبي الذكي",subtitle:"اختر أعراضك وخلّنا نساعدك تعرف الأسباب المحتملة والفيتامينات اللي ممكن تحتاجها",disclaimerTitle:"تنبيه مهم",disclaimerText:"هذا التطبيق للتوعية الصحية فقط وليس بديلاً عن الاستشارة الطبية المتخصصة. دائماً راجع طبيبك قبل أخذ أي فيتامينات أو مكملات غذائية.",searchPlaceholder:"ابحث عن عرض...",customPlaceholder:"أو اكتب عرض ثاني ما موجود في القائمة...",aiOff:"📋 تحليل من قاعدة البيانات",aiOn:"🤖 تحليل ذكي بالذكاء الاصطناعي",analyzeBtn:"🔬 حلّل أعراضي",analyzing:"جاري التحليل...",countSuffix:" عرض مختار",resultsTitle:"📊 نتائج التحليل",tabConditions:"🩺 الحالات المحتملة",tabVitamins:"💊 الفيتامينات",tabTests:"🧪 التحاليل",tabTips:"💡 نصائح",combinedTitle:"🧬 التحليل الشامل",dose:"📏 الجرعة:",priorityHigh:"أولوية عالية",priorityMedium:"أولوية متوسطة",priorityLow:"أولوية منخفضة",footer:"⚕️ هذه المعلومات للتوعية فقط وليست بديلاً عن الاستشارة الطبية المتخصصة. دائماً استشر طبيبك قبل تناول أي مكملات أو فيتامينات."},
+en:{title:"Smart Medical Analyzer",subtitle:"Select your symptoms and let us help you identify possible causes and vitamins you might need",disclaimerTitle:"Important Notice",disclaimerText:"This app is for health awareness only and is not a substitute for professional medical consultation. Always consult your doctor before taking any vitamins or supplements.",searchPlaceholder:"Search for a symptom...",customPlaceholder:"Or type a symptom not listed above...",aiOff:"📋 Database Analysis",aiOn:"🤖 AI-Powered Smart Analysis",analyzeBtn:"🔬 Analyze My Symptoms",analyzing:"Analyzing...",countSuffix:" symptoms selected",resultsTitle:"📊 Analysis Results",tabConditions:"🩺 Possible Conditions",tabVitamins:"💊 Vitamins",tabTests:"🧪 Recommended Tests",tabTips:"💡 Tips",combinedTitle:"🧬 Combined Analysis",dose:"📏 Dosage:",priorityHigh:"High Priority",priorityMedium:"Medium Priority",priorityLow:"Low Priority",footer:"⚕️ This information is for awareness only and is not a substitute for professional medical advice. Always consult your doctor before taking any supplements or vitamins."},
+fr:{title:"Analyseur Médical Intelligent",subtitle:"Sélectionnez vos symptômes et laissez-nous vous aider à identifier les causes possibles et les vitamines dont vous pourriez avoir besoin",disclaimerTitle:"Avis Important",disclaimerText:"Cette application est uniquement à des fins de sensibilisation et ne remplace pas une consultation médicale professionnelle.",searchPlaceholder:"Rechercher un symptôme...",customPlaceholder:"Ou tapez un symptôme non listé ci-dessus...",aiOff:"📋 Analyse base de données",aiOn:"🤖 Analyse intelligente par IA",analyzeBtn:"🔬 Analyser mes symptômes",analyzing:"Analyse en cours...",countSuffix:" symptômes sélectionnés",resultsTitle:"📊 Résultats de l'analyse",tabConditions:"🩺 Conditions possibles",tabVitamins:"💊 Vitamines",tabTests:"🧪 Tests recommandés",tabTips:"💡 Conseils",combinedTitle:"🧬 Analyse combinée",dose:"📏 Dosage :",priorityHigh:"Priorité élevée",priorityMedium:"Priorité moyenne",priorityLow:"Priorité faible",footer:"⚕️ Ces informations sont à titre indicatif uniquement. Consultez toujours votre médecin."},
+tr:{title:"Akıllı Tıbbi Analizör",subtitle:"Belirtilerinizi seçin ve olası nedenleri ve ihtiyaç duyabileceğiniz vitaminleri belirlemenize yardımcı olalım",disclaimerTitle:"Önemli Uyarı",disclaimerText:"Bu uygulama yalnızca sağlık bilgilendirmesi amaçlıdır ve profesyonel tıbbi danışmanlığın yerini almaz.",searchPlaceholder:"Bir belirti arayın...",customPlaceholder:"Veya listede olmayan bir belirti yazın...",aiOff:"📋 Veritabanı Analizi",aiOn:"🤖 Yapay Zeka Destekli Analiz",analyzeBtn:"🔬 Belirtilerimi Analiz Et",analyzing:"Analiz ediliyor...",countSuffix:" belirti seçildi",resultsTitle:"📊 Analiz Sonuçları",tabConditions:"🩺 Olası Durumlar",tabVitamins:"💊 Vitaminler",tabTests:"🧪 Önerilen Testler",tabTips:"💡 İpuçları",combinedTitle:"🧬 Birleşik Analiz",dose:"📏 Doz:",priorityHigh:"Yüksek Öncelik",priorityMedium:"Orta Öncelik",priorityLow:"Düşük Öncelik",footer:"⚕️ Bu bilgiler yalnızca bilgilendirme amaçlıdır. Her zaman doktorunuza danışın."},
+};
+
+// ══════════════════════════════════════════════════
+// SYMPTOMS
+// ══════════════════════════════════════════════════
+const SYMPTOMS={
+ar:{"صداع":{icon:"🤕"},"تعب وإرهاق":{icon:"😴"},"دوخة":{icon:"💫"},"غثيان":{icon:"🤢"},"ألم في المعدة":{icon:"🤒"},"ألم في الصدر":{icon:"💔"},"ضيق تنفس":{icon:"😮‍💨"},"ألم في المفاصل":{icon:"🦴"},"أرق":{icon:"🌙"},"تساقط شعر":{icon:"💇"},"جفاف البشرة":{icon:"🧴"},"تنميل الأطراف":{icon:"🖐️"},"ضعف النظر":{icon:"👁️"},"ألم في الظهر":{icon:"🔙"},"حرارة مرتفعة":{icon:"🌡️"},"سعال":{icon:"😷"},"التهاب الحلق":{icon:"🗣️"},"ضعف التركيز":{icon:"🧠"},"تقلب المزاج":{icon:"😔"},"فقدان الشهية":{icon:"🍽️"},"زيادة الوزن":{icon:"⚖️"},"خفقان القلب":{icon:"❤️‍🔥"},"تشنجات عضلية":{icon:"💪"},"ضعف المناعة":{icon:"🛡️"}},
+en:{"Headache":{icon:"🤕"},"Fatigue":{icon:"😴"},"Dizziness":{icon:"💫"},"Nausea":{icon:"🤢"},"Stomach Pain":{icon:"🤒"},"Chest Pain":{icon:"💔"},"Shortness of Breath":{icon:"😮‍💨"},"Joint Pain":{icon:"🦴"},"Insomnia":{icon:"🌙"},"Hair Loss":{icon:"💇"},"Dry Skin":{icon:"🧴"},"Numbness":{icon:"🖐️"},"Vision Problems":{icon:"👁️"},"Back Pain":{icon:"🔙"},"Fever":{icon:"🌡️"},"Cough":{icon:"😷"},"Sore Throat":{icon:"🗣️"},"Poor Concentration":{icon:"🧠"},"Mood Swings":{icon:"😔"},"Loss of Appetite":{icon:"🍽️"},"Weight Gain":{icon:"⚖️"},"Heart Palpitations":{icon:"❤️‍🔥"},"Muscle Cramps":{icon:"💪"},"Weak Immunity":{icon:"🛡️"}},
+fr:{"Maux de tête":{icon:"🤕"},"Fatigue":{icon:"😴"},"Vertiges":{icon:"💫"},"Nausées":{icon:"🤢"},"Douleurs abdominales":{icon:"🤒"},"Douleurs thoraciques":{icon:"💔"},"Essoufflement":{icon:"😮‍💨"},"Douleurs articulaires":{icon:"🦴"},"Insomnie":{icon:"🌙"},"Chute de cheveux":{icon:"💇"},"Peau sèche":{icon:"🧴"},"Engourdissement":{icon:"🖐️"},"Troubles de la vision":{icon:"👁️"},"Mal de dos":{icon:"🔙"},"Fièvre":{icon:"🌡️"},"Toux":{icon:"😷"},"Mal de gorge":{icon:"🗣️"},"Difficultés de concentration":{icon:"🧠"},"Sautes d'humeur":{icon:"😔"},"Perte d'appétit":{icon:"🍽️"},"Prise de poids":{icon:"⚖️"},"Palpitations cardiaques":{icon:"❤️‍🔥"},"Crampes musculaires":{icon:"💪"},"Immunité affaiblie":{icon:"🛡️"}},
+tr:{"Baş ağrısı":{icon:"🤕"},"Yorgunluk":{icon:"😴"},"Baş dönmesi":{icon:"💫"},"Bulantı":{icon:"🤢"},"Karın ağrısı":{icon:"🤒"},"Göğüs ağrısı":{icon:"💔"},"Nefes darlığı":{icon:"😮‍💨"},"Eklem ağrısı":{icon:"🦴"},"Uykusuzluk":{icon:"🌙"},"Saç dökülmesi":{icon:"💇"},"Kuru cilt":{icon:"🧴"},"Uyuşma":{icon:"🖐️"},"Görme sorunları":{icon:"👁️"},"Sırt ağrısı":{icon:"🔙"},"Ateş":{icon:"🌡️"},"Öksürük":{icon:"😷"},"Boğaz ağrısı":{icon:"🗣️"},"Konsantrasyon bozukluğu":{icon:"🧠"},"Ruh hali değişimleri":{icon:"😔"},"İştah kaybı":{icon:"🍽️"},"Kilo alma":{icon:"⚖️"},"Çarpıntı":{icon:"❤️‍🔥"},"Kas krampları":{icon:"💪"},"Zayıf bağışıklık":{icon:"🛡️"}},
+};
+
+// ══════════════════════════════════════════════════
+// ANALYSIS DATA (full database per language)
+// ══════════════════════════════════════════════════
+const ANALYSIS={
+ar:{
+"صداع":{conditions:["صداع التوتر","الشقيقة (الصداع النصفي)","ارتفاع ضغط الدم","التهاب الجيوب الأنفية"],vitamins:[{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"يساعد في استرخاء الأوعية الدموية وتخفيف الصداع"},{name:"فيتامين B2",dose:"400 ملغ يومياً",reason:"فعال في تقليل نوبات الشقيقة"},{name:"كوإنزيم Q10",dose:"100 ملغ يومياً",reason:"يدعم إنتاج الطاقة في خلايا الدماغ"}],tips:["اشرب ماء كافي (8 أكواب يومياً)","نظّم نومك","قلل من الكافيين تدريجياً","مارس تمارين الاسترخاء"]},
+"تعب وإرهاق":{conditions:["فقر الدم","قصور الغدة الدرقية","نقص فيتامين D","نقص فيتامين B12"],vitamins:[{name:"فيتامين D3",dose:"2000-5000 وحدة دولية يومياً",reason:"نقصه شائع ويسبب تعب مزمن"},{name:"فيتامين B12",dose:"1000 ميكروغرام يومياً",reason:"ضروري لإنتاج الطاقة"},{name:"حديد",dose:"18-27 ملغ يومياً",reason:"نقصه يسبب فقر الدم"},{name:"كوإنزيم Q10",dose:"100-200 ملغ يومياً",reason:"يعزز إنتاج الطاقة"}],tips:["اعمل تحليل CBC وفيتامين D وB12","نم 7-8 ساعات يومياً","مارس رياضة خفيفة","قلل السكريات المصنعة"]},
+"دوخة":{conditions:["انخفاض ضغط الدم","فقر الدم","مشاكل الأذن الداخلية","الجفاف"],vitamins:[{name:"حديد",dose:"18 ملغ يومياً",reason:"يعالج فقر الدم"},{name:"فيتامين B12",dose:"1000 ميكروغرام يومياً",reason:"يدعم الجهاز العصبي"},{name:"فيتامين B6",dose:"50 ملغ يومياً",reason:"يدعم صحة الأعصاب"}],tips:["اشرب سوائل كافية","قم ببطء من الجلوس","راجع طبيب أنف وأذن","تجنب الحركات المفاجئة"]},
+"غثيان":{conditions:["التهاب المعدة","ارتجاع المريء","قرحة المعدة","حمل"],vitamins:[{name:"فيتامين B6",dose:"25-50 ملغ يومياً",reason:"فعال في تخفيف الغثيان"},{name:"زنجبيل",dose:"250 ملغ 4 مرات يومياً",reason:"علاج طبيعي مثبت"},{name:"بروبيوتيك",dose:"حسب المنتج",reason:"يحسن صحة الجهاز الهضمي"}],tips:["كل وجبات صغيرة ومتكررة","تجنب الأكل الدسم","اشرب ماء بارد ببطء","تجنب الاستلقاء بعد الأكل"]},
+"ألم في المعدة":{conditions:["التهاب المعدة","القولون العصبي","قرحة المعدة","حصوات المرارة"],vitamins:[{name:"بروبيوتيك",dose:"10 مليار CFU يومياً",reason:"يوازن بكتيريا الأمعاء"},{name:"L-Glutamine",dose:"5 غرام يومياً",reason:"يصلح بطانة المعدة"},{name:"زنك كارنوسين",dose:"75 ملغ مرتين يومياً",reason:"يحمي بطانة المعدة"}],tips:["تجنب الأكل الحار والحامض","كل ببطء وامضغ جيداً","راجع طبيب باطنية","قلل التوتر"]},
+"ألم في الصدر":{conditions:["⚠️ قد يكون طارئ طبي - راجع الطوارئ فوراً","ارتجاع المريء","التهاب العضلات","القلق"],vitamins:[{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"يدعم صحة القلب"},{name:"أوميغا 3",dose:"1000-2000 ملغ يومياً",reason:"يدعم القلب والأوعية"},{name:"كوإنزيم Q10",dose:"100-200 ملغ يومياً",reason:"مهم لعضلة القلب"}],tips:["⚠️ إذا كان مفاجئ وشديد اتصل بالإسعاف","راجع طبيب قلب","اعمل تخطيط قلب","قلل التوتر"]},
+"ضيق تنفس":{conditions:["⚠️ قد يكون طارئ طبي","الربو","فقر الدم الشديد","مشاكل القلب"],vitamins:[{name:"حديد",dose:"حسب التحليل",reason:"فقر الدم يسبب ضيق التنفس"},{name:"فيتامين D3",dose:"2000 وحدة دولية يومياً",reason:"يدعم الجهاز التنفسي"},{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"يريح عضلات القصبات"}],tips:["راجع طبيب فوراً إذا كان مفاجئ","تمارين التنفس العميق","تجنب التدخين","فحص وظائف الرئة"]},
+"ألم في المفاصل":{conditions:["التهاب المفاصل","نقص فيتامين D","النقرس","الروماتيزم"],vitamins:[{name:"فيتامين D3",dose:"4000-5000 وحدة دولية يومياً",reason:"نقصه سبب رئيسي لآلام المفاصل"},{name:"أوميغا 3",dose:"2000-3000 ملغ يومياً",reason:"مضاد للالتهابات"},{name:"جلوكوزامين + كوندرويتين",dose:"1500+1200 ملغ يومياً",reason:"يدعم الغضاريف"},{name:"كركم",dose:"500 ملغ مرتين يومياً",reason:"مضاد التهاب طبيعي"}],tips:["تحليل فيتامين D وحمض اليوريك","حافظ على وزن صحي","مارس السباحة أو المشي","كمادات دافئة"]},
+"أرق":{conditions:["اضطراب القلق","نقص المغنيسيوم","اضطراب الساعة البيولوجية","الاكتئاب"],vitamins:[{name:"مغنيسيوم جلايسينات",dose:"400 ملغ قبل النوم",reason:"يريح الجهاز العصبي"},{name:"ميلاتونين",dose:"1-3 ملغ قبل النوم",reason:"ينظم دورة النوم"},{name:"L-Theanine",dose:"200 ملغ قبل النوم",reason:"يعزز الاسترخاء"}],tips:["أوقف الشاشات قبل النوم بساعة","روتين نوم ثابت","غرفة مظلمة وباردة","تجنب الكافيين بعد الظهر"]},
+"تساقط شعر":{conditions:["نقص الحديد","نقص فيتامين D","مشاكل الغدة الدرقية","التوتر المزمن"],vitamins:[{name:"بيوتين (B7)",dose:"5000 ميكروغرام يومياً",reason:"ضروري لنمو الشعر"},{name:"حديد",dose:"حسب التحليل",reason:"نقصه سبب شائع لتساقط الشعر"},{name:"زنك",dose:"30 ملغ يومياً",reason:"يدعم نمو الشعر"},{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"نقصه مرتبط بتساقط الشعر"}],tips:["تحليل شامل: حديد، فيريتين، غدة درقية، فيتامين D","قلل الحرارة على الشعر","بروتين كافي","راجع طبيب جلدية"]},
+"جفاف البشرة":{conditions:["نقص أوميغا 3","نقص فيتامين A","قصور الغدة الدرقية","الإكزيما"],vitamins:[{name:"أوميغا 3",dose:"2000 ملغ يومياً",reason:"يرطب البشرة من الداخل"},{name:"فيتامين E",dose:"400 وحدة دولية يومياً",reason:"مضاد أكسدة يرطب البشرة"},{name:"فيتامين A",dose:"5000 وحدة دولية يومياً",reason:"يجدد خلايا البشرة"},{name:"حمض الهيالورونيك",dose:"120-240 ملغ يومياً",reason:"يحتفظ بالرطوبة"}],tips:["8 أكواب ماء يومياً","مرطب بعد الاستحمام","تجنب الماء الحار جداً","واقي شمس يومياً"]},
+"تنميل الأطراف":{conditions:["نقص فيتامين B12","السكري","متلازمة النفق الرسغي","مشاكل العمود الفقري"],vitamins:[{name:"فيتامين B12",dose:"1000-2000 ميكروغرام يومياً",reason:"نقصه سبب رئيسي للتنميل"},{name:"فيتامين B6",dose:"50 ملغ يومياً",reason:"يدعم الأعصاب الطرفية"},{name:"حمض ألفا ليبويك",dose:"600 ملغ يومياً",reason:"يحمي الأعصاب"}],tips:["تحليل B12 وسكر صائم","تمارين تمدد","تجنب الجلوس الطويل","راجع طبيب أعصاب"]},
+"ضعف النظر":{conditions:["إجهاد العين الرقمي","قصر/طول النظر","جفاف العين","نقص فيتامين A"],vitamins:[{name:"لوتين + زياكسانثين",dose:"10+2 ملغ يومياً",reason:"يحمي الشبكية من الضوء الأزرق"},{name:"فيتامين A",dose:"5000 وحدة دولية يومياً",reason:"ضروري لصحة العين"},{name:"أوميغا 3",dose:"1000 ملغ يومياً",reason:"يقلل جفاف العين"}],tips:["قاعدة 20-20-20","قلل سطوع الشاشة","راجع طبيب عيون","قطرات مرطبة"]},
+"ألم في الظهر":{conditions:["شد عضلي","انزلاق غضروفي","نقص فيتامين D","وضعية جلوس خاطئة"],vitamins:[{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"نقصه يسبب آلام العظام"},{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"يخفف تشنج العضلات"},{name:"كركم",dose:"500 ملغ مرتين يومياً",reason:"مضاد التهاب طبيعي"},{name:"أوميغا 3",dose:"2000 ملغ يومياً",reason:"يقلل الالتهاب"}],tips:["حسّن وضعية الجلوس","تمارين تقوية الظهر","مرتبة مناسبة","طبيب عظام إذا استمر"]},
+"حرارة مرتفعة":{conditions:["عدوى فيروسية","عدوى بكتيرية","التهاب","⚠️ راجع طبيب إذا استمرت أكثر من 3 أيام"],vitamins:[{name:"فيتامين C",dose:"1000 ملغ يومياً",reason:"يعزز المناعة"},{name:"زنك",dose:"30 ملغ يومياً",reason:"يسرّع الشفاء"},{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"يقوي المناعة"}],tips:["اشرب سوائل كثيرة","ارتح وخذ إجازة","كمادات فاترة","طبيب إذا تجاوزت 39°"]},
+"سعال":{conditions:["نزلة برد","التهاب الشعب الهوائية","حساسية","ارتجاع المريء"],vitamins:[{name:"فيتامين C",dose:"1000-2000 ملغ يومياً",reason:"يقصر مدة البرد"},{name:"زنك",dose:"30 ملغ يومياً",reason:"يقوي المناعة التنفسية"},{name:"عسل طبيعي",dose:"ملعقة 3 مرات يومياً",reason:"مهدئ طبيعي للسعال"}],tips:["مشروبات دافئة","مرطب هواء","تجنب التدخين","طبيب إذا استمر أسبوعين"]},
+"التهاب الحلق":{conditions:["عدوى فيروسية","التهاب اللوزتين","عدوى بكتيرية","جفاف الهواء"],vitamins:[{name:"فيتامين C",dose:"1000 ملغ يومياً",reason:"يعزز المناعة"},{name:"زنك حبوب مص",dose:"15 ملغ كل 3 ساعات",reason:"يخفف ألم الحلق"},{name:"بروبوليس",dose:"حسب المنتج",reason:"مضاد بكتيري طبيعي"}],tips:["غرغرة بماء دافئ وملح","سوائل دافئة بالعسل والليمون","ارتح صوتياً","طبيب إذا استمر 5 أيام"]},
+"ضعف التركيز":{conditions:["نقص الحديد","نقص أوميغا 3","قلة النوم","ADHD","نقص B12"],vitamins:[{name:"أوميغا 3 (DHA)",dose:"1000 ملغ يومياً",reason:"يشكل 60% من دهون الدماغ"},{name:"فيتامين B12",dose:"1000 ميكروغرام يومياً",reason:"ضروري لوظائف الدماغ"},{name:"حديد",dose:"حسب التحليل",reason:"نقصه يؤثر على الأداء الذهني"},{name:"L-Theanine",dose:"200 ملغ يومياً",reason:"يحسن التركيز بدون توتر"}],tips:["نم 7-8 ساعات","تمارين الذهن","قلل تعدد المهام","فترات راحة منتظمة"]},
+"تقلب المزاج":{conditions:["نقص فيتامين D","اضطرابات هرمونية","نقص أوميغا 3","نقص مغنيسيوم"],vitamins:[{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"نقصه مرتبط بالاكتئاب"},{name:"أوميغا 3",dose:"2000 ملغ يومياً",reason:"يدعم صحة الدماغ والمزاج"},{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"يهدئ الجهاز العصبي"},{name:"فيتامين B المركب",dose:"حبة يومياً",reason:"ضروري لإنتاج السيروتونين"}],tips:["رياضة 30 دقيقة يومياً","تعرض للشمس صباحاً","تحدث مع شخص تثق فيه","استشارة أخصائي نفسي"]},
+"فقدان الشهية":{conditions:["اكتئاب","نقص الزنك","مشاكل هضمية","توتر وقلق"],vitamins:[{name:"زنك",dose:"30 ملغ يومياً",reason:"نقصه يقلل التذوق والشهية"},{name:"فيتامين B1",dose:"100 ملغ يومياً",reason:"يحسن الشهية والهضم"},{name:"بروبيوتيك",dose:"حسب المنتج",reason:"يحسن صحة الأمعاء"}],tips:["وجبات صغيرة ومتكررة","أطعمة تحبها","رياضة خفيفة","طبيب إذا استمر أسبوعين"]},
+"زيادة الوزن":{conditions:["قصور الغدة الدرقية","مقاومة الأنسولين","نقص فيتامين D","خلل هرموني"],vitamins:[{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"نقصه مرتبط بصعوبة فقدان الوزن"},{name:"كروميوم",dose:"200 ميكروغرام يومياً",reason:"يحسن حساسية الأنسولين"},{name:"أوميغا 3",dose:"2000 ملغ يومياً",reason:"يحسن الأيض"}],tips:["تحليل غدة درقية وسكر صائم","رياضة 150 دقيقة أسبوعياً","قلل السكريات المعالجة","أخصائي تغذية"]},
+"خفقان القلب":{conditions:["التوتر والقلق","نقص المغنيسيوم","فرط نشاط الغدة الدرقية","فقر الدم"],vitamins:[{name:"مغنيسيوم",dose:"400 ملغ يومياً",reason:"ينظم إيقاع القلب"},{name:"كوإنزيم Q10",dose:"100-200 ملغ يومياً",reason:"يدعم عضلة القلب"},{name:"أوميغا 3",dose:"1000 ملغ يومياً",reason:"ينظم ضربات القلب"}],tips:["قلل الكافيين","تمارين التنفس العميق","تخطيط قلب","طبيب إذا تكرر"]},
+"تشنجات عضلية":{conditions:["نقص المغنيسيوم","الجفاف","نقص البوتاسيوم","إجهاد عضلي"],vitamins:[{name:"مغنيسيوم",dose:"400-600 ملغ يومياً",reason:"السبب الأول للتشنجات"},{name:"بوتاسيوم",dose:"من الطعام (موز، أفوكادو)",reason:"ضروري للعضلات"},{name:"كالسيوم",dose:"500-1000 ملغ يومياً",reason:"يدعم العضلات"},{name:"فيتامين D3",dose:"2000 وحدة دولية يومياً",reason:"يحسن امتصاص المعادن"}],tips:["ماء كافي","تمدد قبل وبعد التمرين","موز وأفوكادو ومكسرات","حمام دافئ"]},
+"ضعف المناعة":{conditions:["نقص فيتامين D","نقص الزنك","التوتر المزمن","قلة النوم"],vitamins:[{name:"فيتامين D3",dose:"4000 وحدة دولية يومياً",reason:"ينشط الخلايا المناعية"},{name:"فيتامين C",dose:"1000 ملغ يومياً",reason:"يعزز كريات الدم البيضاء"},{name:"زنك",dose:"30 ملغ يومياً",reason:"ضروري لـ300+ إنزيم مناعي"},{name:"بروبيوتيك",dose:"10 مليار CFU يومياً",reason:"70% من المناعة في الأمعاء"}],tips:["نم 7-8 ساعات","قلل السكر","رياضة معتدلة","خضار وفواكه ملونة"]},
+},
+en:{
+"Headache":{conditions:["Tension headache","Migraine","High blood pressure","Sinusitis"],vitamins:[{name:"Magnesium",dose:"400 mg daily",reason:"Relaxes blood vessels and relieves headaches"},{name:"Vitamin B2 (Riboflavin)",dose:"400 mg daily",reason:"Reduces migraine episodes"},{name:"Coenzyme Q10",dose:"100 mg daily",reason:"Supports brain cell energy production"}],tips:["Drink 8 glasses of water daily","Regulate your sleep","Reduce caffeine gradually","Practice relaxation exercises"]},
+"Fatigue":{conditions:["Anemia","Hypothyroidism","Vitamin D deficiency","Vitamin B12 deficiency"],vitamins:[{name:"Vitamin D3",dose:"2000-5000 IU daily",reason:"Very common deficiency causing chronic fatigue"},{name:"Vitamin B12",dose:"1000 mcg daily",reason:"Essential for energy production"},{name:"Iron",dose:"18-27 mg daily",reason:"Deficiency causes anemia and fatigue"},{name:"Coenzyme Q10",dose:"100-200 mg daily",reason:"Boosts cellular energy"}],tips:["Get CBC, Vitamin D, and B12 tests","Sleep 7-8 hours daily","Exercise lightly and regularly","Reduce processed sugars"]},
+"Dizziness":{conditions:["Low blood pressure","Anemia","Inner ear problems","Dehydration"],vitamins:[{name:"Iron",dose:"18 mg daily",reason:"Treats anemia-caused dizziness"},{name:"Vitamin B12",dose:"1000 mcg daily",reason:"Supports nervous system and balance"},{name:"Vitamin B6",dose:"50 mg daily",reason:"Supports nerve health"}],tips:["Drink enough fluids","Stand up slowly","See an ENT specialist","Avoid sudden movements"]},
+"Nausea":{conditions:["Gastritis","Acid reflux","Stomach ulcer","Pregnancy"],vitamins:[{name:"Vitamin B6",dose:"25-50 mg daily",reason:"Very effective for nausea, especially in pregnancy"},{name:"Ginger",dose:"250 mg 4 times daily",reason:"Proven natural remedy"},{name:"Probiotics",dose:"As directed",reason:"Improves digestive health"}],tips:["Eat small, frequent meals","Avoid greasy and spicy food","Sip cold water slowly","Don't lie down right after eating"]},
+"Stomach Pain":{conditions:["Gastritis","IBS","Stomach ulcer","Gallstones"],vitamins:[{name:"Probiotics",dose:"10 billion CFU daily",reason:"Balances gut bacteria"},{name:"L-Glutamine",dose:"5 grams daily",reason:"Repairs stomach lining"},{name:"Zinc Carnosine",dose:"75 mg twice daily",reason:"Protects stomach lining"}],tips:["Avoid spicy and acidic food","Eat slowly, chew well","See a gastroenterologist","Reduce stress"]},
+"Chest Pain":{conditions:["⚠️ May be a medical emergency - go to ER immediately","Acid reflux","Muscle inflammation","Anxiety"],vitamins:[{name:"Magnesium",dose:"400 mg daily",reason:"Supports heart health"},{name:"Omega 3",dose:"1000-2000 mg daily",reason:"Supports cardiovascular health"},{name:"Coenzyme Q10",dose:"100-200 mg daily",reason:"Important for heart muscle"}],tips:["⚠️ If sudden and severe, call emergency immediately","See a cardiologist","Get an ECG","Reduce stress"]},
+"Shortness of Breath":{conditions:["⚠️ May be a medical emergency","Asthma","Severe anemia","Heart problems"],vitamins:[{name:"Iron",dose:"As per tests",reason:"Anemia causes shortness of breath"},{name:"Vitamin D3",dose:"2000 IU daily",reason:"Supports respiratory health"},{name:"Magnesium",dose:"400 mg daily",reason:"Relaxes bronchial muscles"}],tips:["See a doctor immediately if sudden","Deep breathing exercises","Avoid smoking","Get lung function test"]},
+"Joint Pain":{conditions:["Arthritis","Vitamin D deficiency","Gout","Rheumatism"],vitamins:[{name:"Vitamin D3",dose:"4000-5000 IU daily",reason:"Deficiency is a major cause"},{name:"Omega 3",dose:"2000-3000 mg daily",reason:"Powerful anti-inflammatory"},{name:"Glucosamine + Chondroitin",dose:"1500+1200 mg daily",reason:"Supports cartilage"},{name:"Turmeric (Curcumin)",dose:"500 mg twice daily",reason:"Natural anti-inflammatory"}],tips:["Get Vitamin D and uric acid tests","Maintain healthy weight","Swim or walk regularly","Use warm compresses"]},
+"Insomnia":{conditions:["Anxiety disorder","Magnesium deficiency","Circadian rhythm disorder","Depression"],vitamins:[{name:"Magnesium Glycinate",dose:"400 mg before bed",reason:"Relaxes the nervous system"},{name:"Melatonin",dose:"1-3 mg 30 min before bed",reason:"Regulates sleep-wake cycle"},{name:"L-Theanine",dose:"200 mg before bed",reason:"Promotes relaxation"}],tips:["Turn off screens 1 hour before bed","Maintain consistent sleep schedule","Keep room dark and cool","Avoid caffeine after noon"]},
+"Hair Loss":{conditions:["Iron deficiency","Vitamin D deficiency","Thyroid problems","Chronic stress"],vitamins:[{name:"Biotin (B7)",dose:"5000 mcg daily",reason:"Essential for hair growth"},{name:"Iron",dose:"As per tests",reason:"Very common cause of hair loss"},{name:"Zinc",dose:"30 mg daily",reason:"Supports hair growth"},{name:"Vitamin D3",dose:"4000 IU daily",reason:"Linked to hair loss"}],tips:["Full blood work: iron, ferritin, thyroid, Vitamin D","Reduce heat styling","Eat enough protein","See a dermatologist"]},
+"Dry Skin":{conditions:["Omega 3 deficiency","Vitamin A deficiency","Hypothyroidism","Eczema"],vitamins:[{name:"Omega 3",dose:"2000 mg daily",reason:"Moisturizes skin from within"},{name:"Vitamin E",dose:"400 IU daily",reason:"Antioxidant that moisturizes"},{name:"Vitamin A",dose:"5000 IU daily",reason:"Essential for skin renewal"},{name:"Hyaluronic Acid",dose:"120-240 mg daily",reason:"Retains skin moisture"}],tips:["Drink 8 glasses of water daily","Moisturize right after shower","Avoid very hot water","Use sunscreen daily"]},
+"Numbness":{conditions:["Vitamin B12 deficiency","Diabetes","Carpal tunnel syndrome","Spinal problems"],vitamins:[{name:"Vitamin B12",dose:"1000-2000 mcg daily",reason:"Major cause of numbness"},{name:"Vitamin B6",dose:"50 mg daily",reason:"Supports peripheral nerves"},{name:"Alpha Lipoic Acid",dose:"600 mg daily",reason:"Protects nerves"}],tips:["Get B12 and fasting blood sugar tests","Do stretching exercises","Avoid sitting in one position too long","See a neurologist"]},
+"Vision Problems":{conditions:["Digital eye strain","Nearsightedness/farsightedness","Dry eyes","Vitamin A deficiency"],vitamins:[{name:"Lutein + Zeaxanthin",dose:"10+2 mg daily",reason:"Protects retina from blue light"},{name:"Vitamin A",dose:"5000 IU daily",reason:"Essential for eye health"},{name:"Omega 3",dose:"1000 mg daily",reason:"Reduces dry eyes"}],tips:["Apply the 20-20-20 rule","Reduce screen brightness","See an ophthalmologist","Use moisturizing eye drops"]},
+"Back Pain":{conditions:["Muscle strain","Herniated disc","Vitamin D deficiency","Poor posture"],vitamins:[{name:"Vitamin D3",dose:"4000 IU daily",reason:"Deficiency causes bone/back pain"},{name:"Magnesium",dose:"400 mg daily",reason:"Relieves muscle spasms"},{name:"Turmeric",dose:"500 mg twice daily",reason:"Natural anti-inflammatory"},{name:"Omega 3",dose:"2000 mg daily",reason:"Reduces inflammation"}],tips:["Improve sitting posture","Do back strengthening exercises","Use proper mattress","See orthopedist if persistent"]},
+"Fever":{conditions:["Viral infection","Bacterial infection","Inflammation","⚠️ See a doctor if it lasts more than 3 days"],vitamins:[{name:"Vitamin C",dose:"1000 mg daily",reason:"Boosts immune system"},{name:"Zinc",dose:"30 mg daily",reason:"Speeds recovery"},{name:"Vitamin D3",dose:"4000 IU daily",reason:"Strengthens immunity"}],tips:["Drink plenty of fluids","Rest","Use lukewarm compresses","See doctor if over 39°C"]},
+"Cough":{conditions:["Common cold","Bronchitis","Allergy","Acid reflux"],vitamins:[{name:"Vitamin C",dose:"1000-2000 mg daily",reason:"Shortens cold duration"},{name:"Zinc",dose:"30 mg daily",reason:"Boosts respiratory immunity"},{name:"Natural Honey",dose:"1 tbsp 3 times daily",reason:"Proven natural cough suppressant"}],tips:["Drink warm beverages","Use humidifier","Avoid smoking","See doctor if persists 2+ weeks"]},
+"Sore Throat":{conditions:["Viral infection","Tonsillitis","Strep infection","Dry air"],vitamins:[{name:"Vitamin C",dose:"1000 mg daily",reason:"Boosts immunity"},{name:"Zinc Lozenges",dose:"15 mg every 3 hours",reason:"Relieves sore throat"},{name:"Propolis",dose:"As directed",reason:"Natural antibacterial"}],tips:["Gargle with warm salt water","Warm fluids with honey and lemon","Rest your voice","See doctor if persists 5+ days"]},
+"Poor Concentration":{conditions:["Iron deficiency","Omega 3 deficiency","Sleep deprivation","ADHD","B12 deficiency"],vitamins:[{name:"Omega 3 (DHA)",dose:"1000 mg daily",reason:"DHA is 60% of brain fat"},{name:"Vitamin B12",dose:"1000 mcg daily",reason:"Essential for brain function"},{name:"Iron",dose:"As per tests",reason:"Affects mental performance"},{name:"L-Theanine",dose:"200 mg daily",reason:"Improves focus without anxiety"}],tips:["Sleep 7-8 hours","Practice mindfulness","Reduce multitasking","Take regular breaks"]},
+"Mood Swings":{conditions:["Vitamin D deficiency","Hormonal imbalances","Omega 3 deficiency","Magnesium deficiency"],vitamins:[{name:"Vitamin D3",dose:"4000 IU daily",reason:"Linked to depression and mood"},{name:"Omega 3",dose:"2000 mg daily",reason:"Supports brain health and mood"},{name:"Magnesium",dose:"400 mg daily",reason:"Calms nervous system"},{name:"Vitamin B Complex",dose:"1 tablet daily",reason:"Essential for serotonin"}],tips:["Exercise 30 min daily","Get morning sunlight","Talk to someone you trust","See a mental health professional"]},
+"Loss of Appetite":{conditions:["Depression","Zinc deficiency","Digestive problems","Stress and anxiety"],vitamins:[{name:"Zinc",dose:"30 mg daily",reason:"Deficiency reduces taste and appetite"},{name:"Vitamin B1 (Thiamine)",dose:"100 mg daily",reason:"Improves appetite"},{name:"Probiotics",dose:"As directed",reason:"Improves gut health"}],tips:["Eat small, frequent meals","Eat foods you enjoy","Light exercise","See doctor if persists 2+ weeks"]},
+"Weight Gain":{conditions:["Hypothyroidism","Insulin resistance","Vitamin D deficiency","Hormonal imbalance"],vitamins:[{name:"Vitamin D3",dose:"4000 IU daily",reason:"Linked to difficulty losing weight"},{name:"Chromium",dose:"200 mcg daily",reason:"Improves insulin sensitivity"},{name:"Omega 3",dose:"2000 mg daily",reason:"Improves metabolism"}],tips:["Get thyroid and fasting blood sugar tests","Exercise 150 min/week","Reduce processed sugars","See a nutritionist"]},
+"Heart Palpitations":{conditions:["Stress and anxiety","Magnesium deficiency","Hyperthyroidism","Anemia"],vitamins:[{name:"Magnesium",dose:"400 mg daily",reason:"Regulates heart rhythm"},{name:"Coenzyme Q10",dose:"100-200 mg daily",reason:"Supports heart muscle"},{name:"Omega 3",dose:"1000 mg daily",reason:"Helps regulate heartbeat"}],tips:["Reduce caffeine","Deep breathing exercises","Get an ECG","See doctor if recurring"]},
+"Muscle Cramps":{conditions:["Magnesium deficiency","Dehydration","Potassium deficiency","Muscle strain"],vitamins:[{name:"Magnesium",dose:"400-600 mg daily",reason:"#1 cause of cramps"},{name:"Potassium",dose:"From food (bananas, avocado)",reason:"Essential for muscles"},{name:"Calcium",dose:"500-1000 mg daily",reason:"Supports muscle function"},{name:"Vitamin D3",dose:"2000 IU daily",reason:"Improves mineral absorption"}],tips:["Drink enough water","Stretch before and after exercise","Eat bananas, avocado, nuts","Take a warm bath"]},
+"Weak Immunity":{conditions:["Vitamin D deficiency","Zinc deficiency","Chronic stress","Sleep deprivation"],vitamins:[{name:"Vitamin D3",dose:"4000 IU daily",reason:"Activates immune cells"},{name:"Vitamin C",dose:"1000 mg daily",reason:"Boosts white blood cells"},{name:"Zinc",dose:"30 mg daily",reason:"Essential for 300+ immune enzymes"},{name:"Probiotics",dose:"10 billion CFU daily",reason:"70% of immunity is in the gut"}],tips:["Sleep 7-8 hours","Reduce processed sugar","Exercise moderately","Eat colorful fruits and vegetables"]},
+},
+fr:{
+"Maux de tête":{conditions:["Céphalée de tension","Migraine","Hypertension","Sinusite"],vitamins:[{name:"Magnésium",dose:"400 mg/jour",reason:"Détend les vaisseaux sanguins"},{name:"Vitamine B2",dose:"400 mg/jour",reason:"Réduit les migraines"},{name:"Coenzyme Q10",dose:"100 mg/jour",reason:"Énergie cérébrale"}],tips:["Buvez 8 verres d'eau/jour","Réglez votre sommeil","Réduisez la caféine","Exercices de relaxation"]},
+"Fatigue":{conditions:["Anémie","Hypothyroïdie","Carence en vitamine D","Carence en B12"],vitamins:[{name:"Vitamine D3",dose:"2000-5000 UI/jour",reason:"Carence très courante"},{name:"Vitamine B12",dose:"1000 mcg/jour",reason:"Essentielle pour l'énergie"},{name:"Fer",dose:"18-27 mg/jour",reason:"Carence = anémie"},{name:"Coenzyme Q10",dose:"100-200 mg/jour",reason:"Énergie cellulaire"}],tips:["Bilan sanguin complet","Dormez 7-8 heures","Exercice léger régulier","Réduisez les sucres"]},
+"Vertiges":{conditions:["Hypotension","Anémie","Oreille interne","Déshydratation"],vitamins:[{name:"Fer",dose:"18 mg/jour",reason:"Traite l'anémie"},{name:"Vitamine B12",dose:"1000 mcg/jour",reason:"Système nerveux"},{name:"Vitamine B6",dose:"50 mg/jour",reason:"Santé nerveuse"}],tips:["Buvez suffisamment","Levez-vous lentement","Consultez un ORL","Évitez mouvements brusques"]},
+"Nausées":{conditions:["Gastrite","Reflux","Ulcère","Grossesse"],vitamins:[{name:"Vitamine B6",dose:"25-50 mg/jour",reason:"Efficace contre les nausées"},{name:"Gingembre",dose:"250 mg 4x/jour",reason:"Remède naturel prouvé"},{name:"Probiotiques",dose:"Selon produit",reason:"Santé digestive"}],tips:["Repas petits et fréquents","Évitez le gras","Eau froide lentement","Ne vous allongez pas après manger"]},
+"Douleurs abdominales":{conditions:["Gastrite","Côlon irritable","Ulcère","Calculs biliaires"],vitamins:[{name:"Probiotiques",dose:"10 milliards CFU/jour",reason:"Équilibre la flore"},{name:"L-Glutamine",dose:"5 g/jour",reason:"Répare la muqueuse"},{name:"Zinc Carnosine",dose:"75 mg 2x/jour",reason:"Protège l'estomac"}],tips:["Évitez épicé et acide","Mâchez bien","Gastro-entérologue","Réduisez le stress"]},
+"Douleurs thoraciques":{conditions:["⚠️ Urgence possible - allez aux urgences","Reflux","Inflammation musculaire","Anxiété"],vitamins:[{name:"Magnésium",dose:"400 mg/jour",reason:"Santé cardiaque"},{name:"Oméga 3",dose:"1000-2000 mg/jour",reason:"Santé cardiovasculaire"},{name:"Coenzyme Q10",dose:"100-200 mg/jour",reason:"Muscle cardiaque"}],tips:["⚠️ Douleur soudaine = urgences","Cardiologue","ECG","Réduisez le stress"]},
+"Essoufflement":{conditions:["⚠️ Urgence possible","Asthme","Anémie sévère","Problèmes cardiaques"],vitamins:[{name:"Fer",dose:"Selon résultats",reason:"Anémie = essoufflement"},{name:"Vitamine D3",dose:"2000 UI/jour",reason:"Système respiratoire"},{name:"Magnésium",dose:"400 mg/jour",reason:"Détend les bronches"}],tips:["Médecin si soudain","Respiration profonde","Évitez le tabac","Test pulmonaire"]},
+"Douleurs articulaires":{conditions:["Arthrite","Carence en D","Goutte","Rhumatisme"],vitamins:[{name:"Vitamine D3",dose:"4000-5000 UI/jour",reason:"Cause majeure de douleurs"},{name:"Oméga 3",dose:"2000-3000 mg/jour",reason:"Anti-inflammatoire puissant"},{name:"Glucosamine+Chondroïtine",dose:"1500+1200 mg/jour",reason:"Santé du cartilage"},{name:"Curcuma",dose:"500 mg 2x/jour",reason:"Anti-inflammatoire naturel"}],tips:["Tests vitamine D et acide urique","Poids santé","Natation ou marche","Compresses chaudes"]},
+"Insomnie":{conditions:["Anxiété","Carence en magnésium","Rythme circadien","Dépression"],vitamins:[{name:"Magnésium Glycinate",dose:"400 mg au coucher",reason:"Détend le système nerveux"},{name:"Mélatonine",dose:"1-3 mg 30 min avant",reason:"Régule le sommeil"},{name:"L-Théanine",dose:"200 mg au coucher",reason:"Relaxation sans somnolence"}],tips:["Écrans off 1h avant","Horaire de sommeil régulier","Chambre sombre et fraîche","Pas de caféine après midi"]},
+"Chute de cheveux":{conditions:["Carence en fer","Carence en D","Thyroïde","Stress chronique"],vitamins:[{name:"Biotine (B7)",dose:"5000 mcg/jour",reason:"Croissance des cheveux"},{name:"Fer",dose:"Selon résultats",reason:"Cause très courante"},{name:"Zinc",dose:"30 mg/jour",reason:"Croissance capillaire"},{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Liée à la chute"}],tips:["Bilan: fer, ferritine, thyroïde, D","Moins de chaleur","Assez de protéines","Dermatologue"]},
+"Peau sèche":{conditions:["Carence oméga 3","Carence en A","Hypothyroïdie","Eczéma"],vitamins:[{name:"Oméga 3",dose:"2000 mg/jour",reason:"Hydrate de l'intérieur"},{name:"Vitamine E",dose:"400 UI/jour",reason:"Antioxydant hydratant"},{name:"Vitamine A",dose:"5000 UI/jour",reason:"Renouvellement cellulaire"},{name:"Acide Hyaluronique",dose:"120-240 mg/jour",reason:"Retient l'hydratation"}],tips:["8 verres d'eau/jour","Hydratez après la douche","Évitez l'eau trop chaude","Écran solaire quotidien"]},
+"Engourdissement":{conditions:["Carence en B12","Diabète","Canal carpien","Problèmes vertébraux"],vitamins:[{name:"Vitamine B12",dose:"1000-2000 mcg/jour",reason:"Cause majeure"},{name:"Vitamine B6",dose:"50 mg/jour",reason:"Nerfs périphériques"},{name:"Acide Alpha-Lipoïque",dose:"600 mg/jour",reason:"Protège les nerfs"}],tips:["Test B12 et glycémie","Étirements","Évitez positions prolongées","Neurologue"]},
+"Troubles de la vision":{conditions:["Fatigue oculaire","Myopie/hypermétropie","Sécheresse oculaire","Carence en A"],vitamins:[{name:"Lutéine+Zéaxanthine",dose:"10+2 mg/jour",reason:"Protège la rétine"},{name:"Vitamine A",dose:"5000 UI/jour",reason:"Santé oculaire"},{name:"Oméga 3",dose:"1000 mg/jour",reason:"Réduit sécheresse"}],tips:["Règle 20-20-20","Réduisez la luminosité","Ophtalmologue","Gouttes hydratantes"]},
+"Mal de dos":{conditions:["Tension musculaire","Hernie discale","Carence en D","Mauvaise posture"],vitamins:[{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Douleurs osseuses"},{name:"Magnésium",dose:"400 mg/jour",reason:"Spasmes musculaires"},{name:"Curcuma",dose:"500 mg 2x/jour",reason:"Anti-inflammatoire"},{name:"Oméga 3",dose:"2000 mg/jour",reason:"Réduit inflammation"}],tips:["Améliorez votre posture","Exercices de dos","Matelas adapté","Orthopédiste si persistant"]},
+"Fièvre":{conditions:["Infection virale","Infection bactérienne","Inflammation","⚠️ Consultez si >3 jours"],vitamins:[{name:"Vitamine C",dose:"1000 mg/jour",reason:"Renforce l'immunité"},{name:"Zinc",dose:"30 mg/jour",reason:"Accélère la guérison"},{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Immunité"}],tips:["Beaucoup de liquides","Repos","Compresses tièdes","Médecin si >39°C"]},
+"Toux":{conditions:["Rhume","Bronchite","Allergie","Reflux"],vitamins:[{name:"Vitamine C",dose:"1000-2000 mg/jour",reason:"Raccourcit le rhume"},{name:"Zinc",dose:"30 mg/jour",reason:"Immunité respiratoire"},{name:"Miel naturel",dose:"1 cuillère 3x/jour",reason:"Antitussif naturel prouvé"}],tips:["Boissons chaudes","Humidificateur","Évitez le tabac","Médecin si >2 semaines"]},
+"Mal de gorge":{conditions:["Infection virale","Amygdalite","Streptocoque","Air sec"],vitamins:[{name:"Vitamine C",dose:"1000 mg/jour",reason:"Immunité et guérison"},{name:"Pastilles de Zinc",dose:"15 mg/3h",reason:"Soulage la gorge"},{name:"Propolis",dose:"Selon produit",reason:"Antibactérien naturel"}],tips:["Gargarisme eau salée","Boissons chaudes miel-citron","Reposez la voix","Médecin si >5 jours"]},
+"Difficultés de concentration":{conditions:["Carence en fer","Carence oméga 3","Manque de sommeil","TDAH","Carence B12"],vitamins:[{name:"Oméga 3 (DHA)",dose:"1000 mg/jour",reason:"60% des graisses cérébrales"},{name:"Vitamine B12",dose:"1000 mcg/jour",reason:"Fonctions cérébrales"},{name:"Fer",dose:"Selon résultats",reason:"Performance mentale"},{name:"L-Théanine",dose:"200 mg/jour",reason:"Concentration sans anxiété"}],tips:["Dormez 7-8 heures","Pleine conscience","Moins de multitâche","Pauses régulières"]},
+"Sautes d'humeur":{conditions:["Carence en D","Hormones","Carence oméga 3","Carence magnésium"],vitamins:[{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Liée à la dépression"},{name:"Oméga 3",dose:"2000 mg/jour",reason:"Santé cérébrale"},{name:"Magnésium",dose:"400 mg/jour",reason:"Calme le système nerveux"},{name:"Complexe B",dose:"1 comprimé/jour",reason:"Production de sérotonine"}],tips:["30 min exercice/jour","Soleil le matin","Parlez à quelqu'un","N'hésitez pas: psychologue"]},
+"Perte d'appétit":{conditions:["Dépression","Carence zinc","Problèmes digestifs","Stress"],vitamins:[{name:"Zinc",dose:"30 mg/jour",reason:"Goût et appétit"},{name:"Vitamine B1",dose:"100 mg/jour",reason:"Améliore l'appétit"},{name:"Probiotiques",dose:"Selon produit",reason:"Santé intestinale"}],tips:["Repas petits et fréquents","Mangez ce que vous aimez","Exercice léger","Médecin si >2 semaines"]},
+"Prise de poids":{conditions:["Hypothyroïdie","Résistance insuline","Carence en D","Hormones"],vitamins:[{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Difficulté à perdre du poids"},{name:"Chrome",dose:"200 mcg/jour",reason:"Sensibilité insuline"},{name:"Oméga 3",dose:"2000 mg/jour",reason:"Métabolisme"}],tips:["Bilan thyroïdien et glycémie","150 min exercice/semaine","Réduisez sucres","Nutritionniste"]},
+"Palpitations cardiaques":{conditions:["Stress","Carence magnésium","Hyperthyroïdie","Anémie"],vitamins:[{name:"Magnésium",dose:"400 mg/jour",reason:"Régule le rythme"},{name:"Coenzyme Q10",dose:"100-200 mg/jour",reason:"Muscle cardiaque"},{name:"Oméga 3",dose:"1000 mg/jour",reason:"Rythme cardiaque"}],tips:["Réduisez la caféine","Respiration profonde","ECG","Médecin si récurrent"]},
+"Crampes musculaires":{conditions:["Carence magnésium","Déshydratation","Carence potassium","Surmenage"],vitamins:[{name:"Magnésium",dose:"400-600 mg/jour",reason:"Cause #1 des crampes"},{name:"Potassium",dose:"Alimentation (bananes)",reason:"Fonction musculaire"},{name:"Calcium",dose:"500-1000 mg/jour",reason:"Contraction musculaire"},{name:"Vitamine D3",dose:"2000 UI/jour",reason:"Absorption minéraux"}],tips:["Suffisamment d'eau","Étirez-vous","Bananes, avocat, noix","Bain chaud"]},
+"Immunité affaiblie":{conditions:["Carence en D","Carence zinc","Stress chronique","Manque de sommeil"],vitamins:[{name:"Vitamine D3",dose:"4000 UI/jour",reason:"Active l'immunité"},{name:"Vitamine C",dose:"1000 mg/jour",reason:"Globules blancs"},{name:"Zinc",dose:"30 mg/jour",reason:"300+ enzymes immunitaires"},{name:"Probiotiques",dose:"10 milliards CFU/jour",reason:"70% immunité = intestin"}],tips:["Dormez 7-8h","Réduisez le sucre","Exercice modéré","Fruits et légumes colorés"]},
+},
+tr:{
+"Baş ağrısı":{conditions:["Gerilim baş ağrısı","Migren","Yüksek tansiyon","Sinüzit"],vitamins:[{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Damarları gevşetir"},{name:"B2 Vitamini",dose:"Günlük 400 mg",reason:"Migreni azaltır"},{name:"Koenzim Q10",dose:"Günlük 100 mg",reason:"Beyin enerjisi"}],tips:["Günde 8 bardak su","Uyku düzeni","Kafeini azaltın","Gevşeme egzersizleri"]},
+"Yorgunluk":{conditions:["Anemi","Hipotiroidizm","D vitamini eksikliği","B12 eksikliği"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 2000-5000 IU",reason:"Kronik yorgunluk nedeni"},{name:"B12 Vitamini",dose:"Günlük 1000 mcg",reason:"Enerji üretimi için gerekli"},{name:"Demir",dose:"Günlük 18-27 mg",reason:"Anemi ve yorgunluk"},{name:"Koenzim Q10",dose:"Günlük 100-200 mg",reason:"Hücresel enerji"}],tips:["Tam kan sayımı, D ve B12 testleri","7-8 saat uyku","Hafif egzersiz","İşlenmiş şekerleri azaltın"]},
+"Baş dönmesi":{conditions:["Düşük tansiyon","Anemi","İç kulak sorunları","Dehidratasyon"],vitamins:[{name:"Demir",dose:"Günlük 18 mg",reason:"Anemiyi tedavi eder"},{name:"B12 Vitamini",dose:"Günlük 1000 mcg",reason:"Sinir sistemi"},{name:"B6 Vitamini",dose:"Günlük 50 mg",reason:"Sinir sağlığı"}],tips:["Yeterli sıvı için","Yavaşça kalkın","KBB uzmanı","Ani hareketlerden kaçının"]},
+"Bulantı":{conditions:["Gastrit","Reflü","Ülser","Hamilelik"],vitamins:[{name:"B6 Vitamini",dose:"Günlük 25-50 mg",reason:"Bulantıda çok etkili"},{name:"Zencefil",dose:"Günde 4x 250 mg",reason:"Kanıtlanmış doğal çare"},{name:"Probiyotik",dose:"Ürüne göre",reason:"Sindirim sağlığı"}],tips:["Küçük sık öğünler","Yağlıdan kaçının","Soğuk su yavaşça","Yemekten sonra uzanmayın"]},
+"Karın ağrısı":{conditions:["Gastrit","IBS","Ülser","Safra taşları"],vitamins:[{name:"Probiyotik",dose:"Günlük 10 milyar CFU",reason:"Bağırsak florası"},{name:"L-Glutamin",dose:"Günlük 5 g",reason:"Mide mukozası onarır"},{name:"Çinko Karnozin",dose:"Günde 2x 75 mg",reason:"Mideyi korur"}],tips:["Baharatlı ve asitliden kaçının","Yavaş yiyin","Gastroenterolog","Stresi azaltın"]},
+"Göğüs ağrısı":{conditions:["⚠️ Tıbbi acil olabilir - acile gidin","Reflü","Kas iltihabı","Anksiyete"],vitamins:[{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Kalp sağlığı"},{name:"Omega 3",dose:"Günlük 1000-2000 mg",reason:"Kardiyovasküler"},{name:"Koenzim Q10",dose:"Günlük 100-200 mg",reason:"Kalp kası"}],tips:["⚠️ Ani ve şiddetli = ambulans","Kardiyolog","EKG","Stresi azaltın"]},
+"Nefes darlığı":{conditions:["⚠️ Tıbbi acil olabilir","Astım","Şiddetli anemi","Kalp sorunları"],vitamins:[{name:"Demir",dose:"Test sonuçlarına göre",reason:"Anemi nefes darlığı yapar"},{name:"D3 Vitamini",dose:"Günlük 2000 IU",reason:"Solunum sistemi"},{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Bronşları gevşetir"}],tips:["Ani başladıysa doktor","Derin nefes egzersizleri","Sigaradan kaçının","Akciğer fonksiyon testi"]},
+"Eklem ağrısı":{conditions:["Artrit","D vitamini eksikliği","Gut","Romatizma"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 4000-5000 IU",reason:"Başlıca neden"},{name:"Omega 3",dose:"Günlük 2000-3000 mg",reason:"Güçlü anti-enflamatuar"},{name:"Glukozamin+Kondroitin",dose:"Günlük 1500+1200 mg",reason:"Kıkırdak sağlığı"},{name:"Zerdeçal",dose:"Günde 2x 500 mg",reason:"Doğal anti-enflamatuar"}],tips:["D vitamini ve ürik asit testleri","Sağlıklı kilo","Yüzme veya yürüyüş","Sıcak kompres"]},
+"Uykusuzluk":{conditions:["Anksiyete","Magnezyum eksikliği","Sirkadiyen ritim","Depresyon"],vitamins:[{name:"Magnezyum Glikinaat",dose:"Yatmadan 400 mg",reason:"Sinir sistemini gevşetir"},{name:"Melatonin",dose:"Yatmadan 30 dk önce 1-3 mg",reason:"Uyku döngüsü"},{name:"L-Teanin",dose:"Yatmadan 200 mg",reason:"Uyuşukluk olmadan gevşeme"}],tips:["Yatmadan 1 saat önce ekranları kapatın","Düzenli uyku rutini","Karanlık ve serin oda","Öğleden sonra kafein yok"]},
+"Saç dökülmesi":{conditions:["Demir eksikliği","D vitamini eksikliği","Tiroid","Kronik stres"],vitamins:[{name:"Biyotin (B7)",dose:"Günlük 5000 mcg",reason:"Saç büyümesi için"},{name:"Demir",dose:"Test sonuçlarına göre",reason:"Çok yaygın neden"},{name:"Çinko",dose:"Günlük 30 mg",reason:"Saç büyümesi"},{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Dökülmeyle bağlantılı"}],tips:["Testler: demir, ferritin, tiroid, D","Isıyı azaltın","Yeterli protein","Dermatolog"]},
+"Kuru cilt":{conditions:["Omega 3 eksikliği","A vitamini eksikliği","Hipotiroidizm","Egzama"],vitamins:[{name:"Omega 3",dose:"Günlük 2000 mg",reason:"İçten nemlendirir"},{name:"E Vitamini",dose:"Günlük 400 IU",reason:"Antioksidan nemlendirici"},{name:"A Vitamini",dose:"Günlük 5000 IU",reason:"Hücre yenilenmesi"},{name:"Hyalüronik Asit",dose:"Günlük 120-240 mg",reason:"Nemi tutar"}],tips:["Günde 8 bardak su","Duştan sonra nemlendirin","Çok sıcak sudan kaçının","Günlük güneş kremi"]},
+"Uyuşma":{conditions:["B12 eksikliği","Diyabet","Karpal tünel","Omurga sorunları"],vitamins:[{name:"B12 Vitamini",dose:"Günlük 1000-2000 mcg",reason:"Başlıca neden"},{name:"B6 Vitamini",dose:"Günlük 50 mg",reason:"Periferik sinirler"},{name:"Alfa Lipoik Asit",dose:"Günlük 600 mg",reason:"Sinirleri korur"}],tips:["B12 ve açlık şekeri testleri","Esneme egzersizleri","Uzun oturmayın","Nörolog"]},
+"Görme sorunları":{conditions:["Dijital göz yorgunluğu","Miyopi/hipermetropi","Kuru göz","A vitamini eksikliği"],vitamins:[{name:"Lutein+Zeaksantin",dose:"Günlük 10+2 mg",reason:"Retinayı korur"},{name:"A Vitamini",dose:"Günlük 5000 IU",reason:"Göz sağlığı"},{name:"Omega 3",dose:"Günlük 1000 mg",reason:"Kuru gözü azaltır"}],tips:["20-20-20 kuralı","Ekran parlaklığını azaltın","Göz doktoru","Nemlendirici damlalar"]},
+"Sırt ağrısı":{conditions:["Kas gerginliği","Disk hernisi","D vitamini eksikliği","Kötü duruş"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Kemik ve sırt ağrısı"},{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Kas spazmları"},{name:"Zerdeçal",dose:"Günde 2x 500 mg",reason:"Anti-enflamatuar"},{name:"Omega 3",dose:"Günlük 2000 mg",reason:"İltihabı azaltır"}],tips:["Oturuş duruşunu düzeltin","Sırt egzersizleri","Uygun yatak","Ortopedist"]},
+"Ateş":{conditions:["Viral enfeksiyon","Bakteriyel enfeksiyon","İltihap","⚠️ 3 günden fazla sürerse doktora"],vitamins:[{name:"C Vitamini",dose:"Günlük 1000 mg",reason:"Bağışıklığı güçlendirir"},{name:"Çinko",dose:"Günlük 30 mg",reason:"İyileşmeyi hızlandırır"},{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Bağışıklık"}],tips:["Bol sıvı","Dinlenin","Ilık kompres","39°C üstünde doktor"]},
+"Öksürük":{conditions:["Soğuk algınlığı","Bronşit","Alerji","Reflü"],vitamins:[{name:"C Vitamini",dose:"Günlük 1000-2000 mg",reason:"Soğuk algınlığını kısaltır"},{name:"Çinko",dose:"Günlük 30 mg",reason:"Solunum bağışıklığı"},{name:"Doğal Bal",dose:"Günde 3x 1 kaşık",reason:"Kanıtlanmış öksürük kesici"}],tips:["Sıcak içecekler","Nemlendirici","Sigaradan kaçının","2 haftadan fazla = doktor"]},
+"Boğaz ağrısı":{conditions:["Viral enfeksiyon","Bademcik","Strep","Kuru hava"],vitamins:[{name:"C Vitamini",dose:"Günlük 1000 mg",reason:"Bağışıklık"},{name:"Çinko Pastilleri",dose:"Her 3 saatte 15 mg",reason:"Boğazı rahatlatır"},{name:"Propolis",dose:"Ürüne göre",reason:"Doğal antibakteriyel"}],tips:["Ilık tuzlu su gargarası","Ballı limonlu sıcak","Sesi dinlendirin","5 günden fazla = doktor"]},
+"Konsantrasyon bozukluğu":{conditions:["Demir eksikliği","Omega 3 eksikliği","Uyku yetersizliği","DEHB","B12 eksikliği"],vitamins:[{name:"Omega 3 (DHA)",dose:"Günlük 1000 mg",reason:"Beyin yağlarının %60'ı"},{name:"B12 Vitamini",dose:"Günlük 1000 mcg",reason:"Beyin fonksiyonu"},{name:"Demir",dose:"Test sonuçlarına göre",reason:"Zihinsel performans"},{name:"L-Teanin",dose:"Günlük 200 mg",reason:"Anksiyetesiz odaklanma"}],tips:["7-8 saat uyku","Farkındalık meditasyonu","Çoklu görevleri azaltın","Düzenli molalar"]},
+"Ruh hali değişimleri":{conditions:["D vitamini eksikliği","Hormonal dengesizlik","Omega 3 eksikliği","Magnezyum eksikliği"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Depresyon ve ruh haliyle bağlantılı"},{name:"Omega 3",dose:"Günlük 2000 mg",reason:"Beyin sağlığı"},{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Sinir sistemini sakinleştirir"},{name:"B Vitamini Kompleksi",dose:"Günde 1 tablet",reason:"Serotonin üretimi"}],tips:["Günde 30 dk egzersiz","Sabah güneşi","Güvendiğiniz biriyle konuşun","Psikologa başvurun"]},
+"İştah kaybı":{conditions:["Depresyon","Çinko eksikliği","Sindirim sorunları","Stres"],vitamins:[{name:"Çinko",dose:"Günlük 30 mg",reason:"Tat ve iştahı etkiler"},{name:"B1 Vitamini",dose:"Günlük 100 mg",reason:"İştahı iyileştirir"},{name:"Probiyotik",dose:"Ürüne göre",reason:"Bağırsak sağlığı"}],tips:["Küçük sık öğünler","Sevdiğiniz yiyecekler","Hafif egzersiz","2 haftadan fazla = doktor"]},
+"Kilo alma":{conditions:["Hipotiroidizm","İnsülin direnci","D vitamini eksikliği","Hormonal dengesizlik"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Kilo verme güçlüğü"},{name:"Krom",dose:"Günlük 200 mcg",reason:"İnsülin duyarlılığı"},{name:"Omega 3",dose:"Günlük 2000 mg",reason:"Metabolizmayı iyileştirir"}],tips:["Tiroid ve şeker testleri","Haftada 150 dk egzersiz","İşlenmiş şekerleri azaltın","Diyetisyen"]},
+"Çarpıntı":{conditions:["Stres","Magnezyum eksikliği","Hipertiroidizm","Anemi"],vitamins:[{name:"Magnezyum",dose:"Günlük 400 mg",reason:"Kalp ritmini düzenler"},{name:"Koenzim Q10",dose:"Günlük 100-200 mg",reason:"Kalp kası"},{name:"Omega 3",dose:"Günlük 1000 mg",reason:"Kalp atışı düzenleme"}],tips:["Kafeini azaltın","Derin nefes","EKG","Tekrarlıyorsa doktor"]},
+"Kas krampları":{conditions:["Magnezyum eksikliği","Dehidratasyon","Potasyum eksikliği","Kas zorlanması"],vitamins:[{name:"Magnezyum",dose:"Günlük 400-600 mg",reason:"Krampların 1 numaralı nedeni"},{name:"Potasyum",dose:"Gıdalardan (muz, avokado)",reason:"Kas fonksiyonu"},{name:"Kalsiyum",dose:"Günlük 500-1000 mg",reason:"Kas fonksiyonu"},{name:"D3 Vitamini",dose:"Günlük 2000 IU",reason:"Mineral emilimi"}],tips:["Yeterli su","Esneme yapın","Muz, avokado, kuruyemiş","Sıcak banyo"]},
+"Zayıf bağışıklık":{conditions:["D vitamini eksikliği","Çinko eksikliği","Kronik stres","Uyku yetersizliği"],vitamins:[{name:"D3 Vitamini",dose:"Günlük 4000 IU",reason:"Bağışıklık hücrelerini aktive eder"},{name:"C Vitamini",dose:"Günlük 1000 mg",reason:"Beyaz kan hücreleri"},{name:"Çinko",dose:"Günlük 30 mg",reason:"300+ bağışıklık enzimi"},{name:"Probiyotik",dose:"Günlük 10 milyar CFU",reason:"Bağışıklığın %70'i bağırsakta"}],tips:["7-8 saat uyku","İşlenmiş şekeri azaltın","Orta düzey egzersiz","Renkli meyve ve sebze"]},
+}
+};
+
+// ══════════════════════════════════════════════════
+// APP STATE & LOGIC
+// ══════════════════════════════════════════════════
+let currentLang='ar', selectedSymptoms=[], useAI=false, activeTab='conditions';
+const $=id=>document.getElementById(id);
+
+function setLang(lang){
+  currentLang=lang; selectedSymptoms=[]; useAI=false; activeTab='conditions';
+  const info=LANGS[lang], ui=UI[lang];
+  document.documentElement.lang=lang; document.documentElement.dir=info.dir;
+  document.body.className=info.dir; document.body.style.fontFamily=info.font;
+  renderLangBar();
+  $('titleText').textContent=ui.title; $('subtitleText').textContent=ui.subtitle;
+  $('disclaimerTitle').textContent=ui.disclaimerTitle; $('disclaimerText').textContent=ui.disclaimerText;
+  $('searchInput').placeholder=ui.searchPlaceholder; $('searchInput').value='';
+  $('customSymptom').placeholder=ui.customPlaceholder; $('customSymptom').value='';
+  $('aiLabel').textContent=ui.aiOff; $('aiLabel').style.color='#6b8299';
+  $('aiSwitch').className='switch'; $('btnContent').textContent=ui.analyzeBtn;
+  $('analyzeBtn').disabled=true; $('countBadge').classList.add('hidden');
+  $('resultsSection').classList.add('hidden'); $('resultsSection').innerHTML='';
+  renderChips();
+}
+
+function renderLangBar(){
+  const bar=$('langBar'); bar.innerHTML='';
+  Object.entries(LANGS).forEach(([c,info])=>{
+    const b=document.createElement('button');
+    b.className=`lang-btn ${c===currentLang?'active':''}`;
+    b.innerHTML=`<span class="lang-flag">${info.flag}</span>${info.label}`;
+    b.addEventListener('click',()=>setLang(c)); bar.appendChild(b);
+  });
+}
+
+function renderChips(filter=''){
+  const g=$('chipsGrid'); g.innerHTML='';
+  Object.entries(SYMPTOMS[currentLang]).forEach(([name,data])=>{
+    if(filter&&!name.toLowerCase().includes(filter.toLowerCase()))return;
+    const sel=selectedSymptoms.includes(name);
+    const d=document.createElement('div'); d.className=`chip ${sel?'selected':''}`;
+    d.innerHTML=`<span class="chip-icon">${data.icon}</span><span>${name}</span>${sel?'<span class="chip-check">✓</span>':''}`;
+    d.addEventListener('click',()=>{const i=selectedSymptoms.indexOf(name);if(i>-1)selectedSymptoms.splice(i,1);else selectedSymptoms.push(name);updateUI()});
+    g.appendChild(d);
+  });
+}
+
+function updateUI(){
+  const ui=UI[currentLang]; renderChips($('searchInput').value);
+  if(selectedSymptoms.length>0){$('countBadge').classList.remove('hidden');$('countBadge').textContent=selectedSymptoms.length+ui.countSuffix;}
+  else $('countBadge').classList.add('hidden');
+  $('analyzeBtn').disabled=selectedSymptoms.length===0&&!$('customSymptom').value.trim();
+  $('resultsSection').classList.add('hidden'); $('resultsSection').innerHTML='';
+}
+
+$('searchInput').addEventListener('input',e=>renderChips(e.target.value));
+$('customSymptom').addEventListener('input',()=>{$('analyzeBtn').disabled=selectedSymptoms.length===0&&!$('customSymptom').value.trim()});
+
+$('aiToggle').addEventListener('click',()=>{
+  useAI=!useAI; const ui=UI[currentLang];
+  $('aiSwitch').className=`switch ${useAI?'on':''}`;
+  $('aiLabel').textContent=useAI?ui.aiOn:ui.aiOff;
+  $('aiLabel').style.color=useAI?'#00d2b4':'#6b8299';
+});
+
+$('analyzeBtn').addEventListener('click',()=>{
+  if(selectedSymptoms.length===0&&!$('customSymptom').value.trim())return;
+  if(useAI)analyzeWithAI();else showLocalResults();
+});
+
+function showLocalResults(){
+  const data=ANALYSIS[currentLang]; const allC=[],allV=[],allT=[];
+  selectedSymptoms.forEach(s=>{const d=data[s];if(!d)return;d.conditions.forEach(c=>{if(!allC.includes(c))allC.push(c)});d.vitamins.forEach(v=>{if(!allV.find(x=>x.name===v.name))allV.push(v)});d.tips.forEach(t=>{if(!allT.includes(t))allT.push(t)})});
+  activeTab='conditions'; renderResults({conditions:allC,vitamins:allV,tips:allT},false);
+}
+
+async function analyzeWithAI(){
+  const ui=UI[currentLang];
+  $('btnContent').innerHTML=`<div class="spinner"></div> ${ui.analyzing}`; $('analyzeBtn').disabled=true;
+  const all=[...selectedSymptoms]; if($('customSymptom').value.trim())all.push($('customSymptom').value.trim());
+  const langName={ar:'Arabic',en:'English',fr:'French',tr:'Turkish'}[currentLang];
+  const prompt=`You are a medical consultant. Patient symptoms: ${all.join(", ")}\n\nRespond ONLY in ${langName}. JSON only:\n{"combined_analysis":"brief analysis","possible_conditions":["3-5 conditions"],"vitamin_deficiencies":[{"name":"","dose":"","reason":"","priority":"high/medium/low"}],"recommended_tests":["tests"],"urgent_warning":"warning or null","lifestyle_tips":["3-5 tips"]}`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+    const d=await r.json(); const t=d.content.map(i=>i.text||"").join("\n");
+    const p=JSON.parse(t.replace(/```json|```/g,"").trim());
+    activeTab='conditions'; renderResults(p,true);
+  }catch(e){console.error(e);useAI=false;$('aiSwitch').className='switch';$('aiLabel').textContent=ui.aiOff;$('aiLabel').style.color='#6b8299';showLocalResults()}
+  $('btnContent').textContent=ui.analyzeBtn; $('analyzeBtn').disabled=false;
+}
+
+function renderResults(data,isAI){
+  const sec=$('resultsSection'), ui=UI[currentLang];
+  sec.classList.remove('hidden'); sec.className='results-section';
+  let h=`<h2 class="results-title">${ui.resultsTitle}</h2>`;
+  if(isAI&&data.combined_analysis)h+=`<div class="analysis-card"><h3>${ui.combinedTitle}</h3><p>${data.combined_analysis}</p></div>`;
+  if(isAI&&data.urgent_warning&&data.urgent_warning!=='null'&&data.urgent_warning!==null)h+=`<div class="urgent-banner"><span style="font-size:22px;flex-shrink:0">🚨</span><p>${data.urgent_warning}</p></div>`;
+  const tabs=isAI?[['conditions',ui.tabConditions],['vitamins',ui.tabVitamins],['tests',ui.tabTests],['tips',ui.tabTips]]:[['conditions',ui.tabConditions],['vitamins',ui.tabVitamins],['tips',ui.tabTips]];
+  h+=`<div class="tabs" id="tabsBar">`; tabs.forEach(([k,l])=>{h+=`<button class="tab-btn ${activeTab===k?'active':''}" data-tab="${k}">${l}</button>`}); h+=`</div><div id="tabContent"></div>`;
+  h+=`<div class="footer-disc"><p>${ui.footer}</p></div>`;
+  sec.innerHTML=h;
+  document.querySelectorAll('#tabsBar .tab-btn').forEach(b=>{b.addEventListener('click',()=>{activeTab=b.dataset.tab;document.querySelectorAll('#tabsBar .tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderTab(data,isAI)})});
+  renderTab(data,isAI);
+  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function renderTab(data,isAI){
+  const ui=UI[currentLang], c=$('tabContent'); let h='';
+  if(activeTab==='conditions'){
+    const items=isAI?(data.possible_conditions||[]):(data.conditions||[]);
+    h+=`<div class="result-card">`; items.forEach((x,i)=>{const u=x.includes('⚠️');h+=`<div class="condition-item ${u?'urgent':''}" style="animation-delay:${i*.08}s"><span class="condition-num ${u?'urgent':''}">${u?'!':i+1}</span><span class="condition-text ${u?'urgent':''}">${x}</span></div>`}); h+=`</div>`;
+  }else if(activeTab==='vitamins'){
+    const items=isAI?(data.vitamin_deficiencies||[]):(data.vitamins||[]);
+    h+=`<div class="vitamins-list">`; items.forEach((v,i)=>{const p=v.priority||'';h+=`<div class="vitamin-card ${p?'priority-'+p:''}" style="animation-delay:${i*.1}s"><div class="vitamin-header"><span class="vitamin-name">💊 ${v.name}</span>${p?`<span class="priority-badge ${p}">${ui['priority'+p.charAt(0).toUpperCase()+p.slice(1)]||p}</span>`:''}</div><p class="vitamin-dose">${ui.dose} <span>${v.dose}</span></p><p class="vitamin-reason">📌 ${v.reason}</p></div>`}); h+=`</div>`;
+  }else if(activeTab==='tests'&&isAI){
+    const items=data.recommended_tests||[];
+    h+=`<div class="result-card">`; items.forEach((t,i)=>{h+=`<div class="test-item" style="animation-delay:${i*.08}s"><span style="color:#00d2b4">🧪</span><span>${t}</span></div>`}); h+=`</div>`;
+  }else if(activeTab==='tips'){
+    const items=isAI?(data.lifestyle_tips||[]):(data.tips||[]);
+    h+=`<div class="result-card">`; items.forEach((t,i)=>{const u=t.includes('⚠️');h+=`<div class="tip-item ${u?'urgent':''}" style="animation-delay:${i*.08}s"><span class="tip-icon">${u?'🚨':'✨'}</span><span class="tip-text" style="${u?'color:#ff8888':''}">${t}</span></div>`}); h+=`</div>`;
+  }
+  c.innerHTML=h;
+}
+
+// INIT
+setLang('ar');
+
+</script>
+</body>
+</html>
